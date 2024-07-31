@@ -70,6 +70,7 @@
 
 @layer base {
   .font-sans {
+    /** Configure Satoshi's alternate "t" to better match TT Norms. */
     font-feature-settings: 'ss03' on;
   }
 }
