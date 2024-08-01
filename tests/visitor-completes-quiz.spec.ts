@@ -8,4 +8,10 @@ test("smoke test", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: /is manual right for you/i }),
   ).toBeVisible();
+
+  await expect(
+    page.getByRole("heading", {
+      name: /which image best matches your hair loss/i,
+    }),
+  ).toBeVisible();
 });

@@ -5,6 +5,16 @@ import { ManualLogo } from "@/components/ui/logos/manual-logo";
 import { TwitterLogo } from "@/components/ui/logos/twitter-logo";
 import Image from "next/image";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 export default function Home() {
   return (
     <main>
@@ -24,9 +34,7 @@ export default function Home() {
               We’re working around the clock to bring you a holistic approach to
               your wellness. From top to bottom, inside and out.
             </p>
-            <Button size="lg" className="mt-9">
-              Take the quiz
-            </Button>
+            <QuizButton />
           </div>
         </div>
         <Image
@@ -222,5 +230,30 @@ function Footer() {
         </p>
       </div>
     </footer>
+  );
+}
+
+function QuizButton() {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="lg" className="mt-9">
+          Take the quiz
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-full h-full">
+        <DialogHeader>
+          <DialogTitle>Is Manual Right For You?</DialogTitle>
+          <DialogDescription>
+            Help us provide you with the best possible care by answering a few
+            quick questions.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="py-4">Dialog contents</div>
+        <DialogFooter>
+          <Button variant="outline">Close</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
