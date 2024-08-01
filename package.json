@@ -10,7 +10,10 @@
     "prettier": "prettier --check 'src/**/*.{ts,tsx,js,jsx,html,css}'",
     "prettier:fix": "prettier --check --write 'src/**/*.{ts,tsx,js,jsx,html,css}'",
     "typecheck": "tsc --noEmit",
-    "test": "vitest src"
+    "test": "vitest src",
+    "e2e": "playwright test",
+    "e2e:install": "playwright install --with-deps chromium",
+    "e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.0",
