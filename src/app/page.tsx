@@ -1,19 +1,9 @@
-import { Button } from "@/components/ui/button";
+import { QuizButton } from "@/components/quiz-button";
 import { FacebookLogo } from "@/components/ui/logos/facebook-logo";
 import { GoogleLogo } from "@/components/ui/logos/google-logo";
 import { ManualLogo } from "@/components/ui/logos/manual-logo";
 import { TwitterLogo } from "@/components/ui/logos/twitter-logo";
 import Image from "next/image";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 export default function Home() {
   return (
@@ -230,30 +220,5 @@ function Footer() {
         </p>
       </div>
     </footer>
-  );
-}
-
-function QuizButton() {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button size="lg" className="mt-9">
-          Take the quiz
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-full h-full">
-        <DialogHeader>
-          <DialogTitle>Is Manual Right For You?</DialogTitle>
-          <DialogDescription>
-            Help us provide you with the best possible care by answering a few
-            quick questions.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="py-4">Dialog contents</div>
-        <DialogFooter>
-          <Button variant="outline">Close</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
   );
 }
