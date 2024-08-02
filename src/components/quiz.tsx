@@ -45,7 +45,7 @@ export function Quiz() {
   const visitorIsRejected = Object.values(chosenOptions).some((o) => o === -1);
 
   return (
-    <div className="py-4">
+    <div className="p-4 flex-grow">
       {visitorIsRejected ? (
         <h3>You&apos;re not eligible for treatment</h3>
       ) : currentIndex === questions.length ? (

@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,21 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { Quiz } from "./quiz";
-
-type Option = {
-  display: string;
-  value: string;
-  isRejection: boolean;
-};
-
-type Question = {
-  question: string;
-  type: string;
-  options: Option[];
-};
 
 export function QuizButton() {
   return (
@@ -35,10 +20,12 @@ export function QuizButton() {
           Take the quiz
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-full h-full">
+      <DialogContent>
         <DialogHeader>
-          <DialogTitle>Is Manual Right For You?</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-brand">
+            Is Manual Right For You?
+          </DialogTitle>
+          <DialogDescription className="text-brand">
             Help us provide you with the best possible care by answering a few
             quick questions.
           </DialogDescription>
