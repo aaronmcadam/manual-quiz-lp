@@ -7,7 +7,7 @@ import { CheckIcon, CircleCheck } from "lucide-react";
 
 type Option = {
   display: string;
-  value: string;
+  value: string | boolean;
   isRejection: boolean;
 };
 
@@ -17,33 +17,75 @@ type Question = {
   options: Option[];
 };
 
+type QuizQuestion = {
+  title: string;
+  options: Option[];
+  response: Option | null;
+  status: "complete" | "current" | "upcoming";
+};
+
 export function Quiz() {
-  const [questions, setQuestions] = React.useState<Question[]>([]);
+  const [questions, setQuestions] = React.useState<QuizQuestion[]>([]);
 
   // TODO: Perf: we may want to somehow preload the display HTML because
-  // we're seeing some flicker when navigating between steps
+  // we're seeing some flicker when navigating between questions
   React.useEffect(() => {
     fetch("/api/questions")
       .then((res) => res.json())
-      .then((data) => setQuestions(data));
+      .then((data: Question[]) =>
+        setQuestions(
+          // Map the fetched data to the view model state
+          // Set the first question as "current" and the rest as "upcoming"
+          data.map((q, i) => {
+            if (i === 0) {
+              return {
+                title: q.question,
+                options: q.options,
+                response: null,
+                status: "current",
+              };
+            }
+
+            return {
+              title: q.question,
+              options: q.options,
+              response: null,
+              status: "upcoming",
+            };
+          }),
+        ),
+      );
   }, []);
 
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const currentQuestion = questions[currentIndex];
 
-  // TODO: we may want to consolidate these state values into
-  // an object we can use to read the overall quiz state
-  // make this take account of any amount of questions
-  // for now, we'll hard code the amount of questions
-  const [chosenOptions, setChosenOptions] = React.useState<
-    Record<number, number | null>
-  >({
-    0: null,
-    1: null,
-    2: null,
-  });
+  const visitorIsRejected = questions.some((q) => q.response?.isRejection);
 
-  const visitorIsRejected = Object.values(chosenOptions).some((o) => o === -1);
+  function handleOptionClick(option: Option) {
+    setQuestions((currentQuestions) => {
+      // Update the current question with its response and "complete" status
+      // and set the next question as "upcoming"
+      const updatedQuestions: QuizQuestion[] = currentQuestions.map((q, i) => {
+        if (i === currentIndex) {
+          return {
+            ...q,
+            response: option,
+            status: "complete",
+          };
+        } else if (i === currentIndex + 1) {
+          return {
+            ...q,
+            status: "current",
+          };
+        }
+        return q;
+      });
+
+      return updatedQuestions;
+    });
+    setCurrentIndex(currentIndex + 1);
+  }
 
   return (
     <div className="flex-grow m-auto max-w-2xl pt-24">
@@ -53,48 +95,36 @@ export function Quiz() {
         <h3>You&apos;re eligible for treatment</h3>
       ) : currentQuestion ? (
         <div>
-          <QuizNavigation />
-          <div className="flex gap-4">
-            {questions.map((_q, i) => (
-              <Button
-                key={i}
-                className={currentIndex === i ? "border-primary" : ""}
-                onClick={() => {
-                  setCurrentIndex(i);
-                }}
-                disabled={chosenOptions[i] === null}
-                variant="outline"
-              >{`Step ${i + 1}`}</Button>
-            ))}
-          </div>
+          <QuizNavigation
+            questions={questions}
+            onButtonClick={(questionIndex) => {
+              setCurrentIndex(questionIndex);
+            }}
+          />
           <h3 className="font-medium text-2xl text-center mt-16">
-            {currentQuestion.question}
+            {currentQuestion.title}
           </h3>
           <div className="grid grid-cols-3 gap-4 mt-8">
-            {currentQuestion.options.map((o, i) => (
-              <Button
-                key={o.value}
-                onClick={() => {
-                  setCurrentIndex(currentIndex + 1);
-                  setChosenOptions((currentChosenOptions) => {
-                    return {
-                      ...currentChosenOptions,
-                      [currentIndex]: o.isRejection ? -1 : i,
-                    };
-                  });
-                }}
-                variant="outline"
-                className={cn("mt-2 h-auto flex flex-col relative", {
-                  "ring-2 ring-primary": chosenOptions[currentIndex] === i,
-                })}
-              >
-                {chosenOptions[currentIndex] === i ? (
-                  <CircleCheck className="h-5 w-5 text-primary absolute top-2 right-2" />
-                ) : null}
-                <span dangerouslySetInnerHTML={{ __html: o.display }} />
-                {o.value}
-              </Button>
-            ))}
+            {currentQuestion.options.map((o, i) => {
+              const isOptionSelected = currentQuestion.response === o;
+
+              return (
+                <Button
+                  key={i}
+                  onClick={() => handleOptionClick(o)}
+                  variant="outline"
+                  className={cn("mt-2 h-auto flex flex-col relative", {
+                    "ring-2 ring-primary": isOptionSelected,
+                  })}
+                >
+                  {isOptionSelected ? (
+                    <CircleCheck className="h-5 w-5 text-primary absolute top-2 right-2" />
+                  ) : null}
+                  <span dangerouslySetInnerHTML={{ __html: o.display }} />
+                  {o.value}
+                </Button>
+              );
+            })}
           </div>
         </div>
       ) : null}
@@ -102,33 +132,30 @@ export function Quiz() {
   );
 }
 
-// const steps = [
-//   { name: "Step 1", href: "#", status: "complete" },
-//   { name: "Step 2", href: "#", status: "complete" },
-//   { name: "Step 3", href: "#", status: "current" },
-//   { name: "Step 4", href: "#", status: "upcoming" },
-//   { name: "Step 5", href: "#", status: "upcoming" },
-// ];
+type QuizNavigationProps = {
+  questions: QuizQuestion[];
+  onButtonClick: (questionIndex: number) => void;
+};
 
-const steps = [
-  { name: "Step 1", href: "#", status: "complete" },
-  { name: "Step 2", href: "#", status: "current" },
-  { name: "Step 3", href: "#", status: "upcoming" },
-];
-
-export function QuizNavigation() {
+export function QuizNavigation({
+  questions,
+  // This prop raises a warning from Next.js in tsc.
+  // We can safely ignore it for now as we're not trying to use a server component in this file.
+  // @see https://github.com/vercel/next.js/discussions/46795
+  onButtonClick,
+}: QuizNavigationProps) {
   return (
-    <nav aria-label="Progress">
+    <nav aria-label="Progress" className="flex flex-col items-center">
       <ol role="list" className="flex items-center">
-        {steps.map((step, stepIndex) => (
+        {questions.map((question, questionIndex) => (
           <li
-            key={step.name}
+            key={question.title}
             className={cn(
-              stepIndex !== steps.length - 1 ? "pr-8 sm:pr-20" : "",
+              questionIndex !== questions.length - 1 ? "pr-8 sm:pr-20" : "",
               "relative",
             )}
           >
-            {step.status === "complete" ? (
+            {question.status === "complete" ? (
               <>
                 <div
                   aria-hidden="true"
@@ -136,18 +163,18 @@ export function QuizNavigation() {
                 >
                   <div className="h-0.5 w-full bg-brand/50" />
                 </div>
-                <a
-                  href="#"
+                <button
+                  onClick={() => onButtonClick(questionIndex)}
                   className="relative flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 hover:bg-brand-300"
                 >
                   <CheckIcon
                     aria-hidden="true"
                     className="h-5 w-5 text-white"
                   />
-                  <span className="sr-only">{step.name}</span>
-                </a>
+                  <span className="sr-only">{`Question ${questionIndex + 1}`}</span>
+                </button>
               </>
-            ) : step.status === "current" ? (
+            ) : question.status === "current" ? (
               <>
                 <div
                   aria-hidden="true"
@@ -155,8 +182,8 @@ export function QuizNavigation() {
                 >
                   <div className="h-0.5 w-full bg-gray-200" />
                 </div>
-                <a
-                  href="#"
+                <button
+                  onClick={() => onButtonClick(questionIndex)}
                   aria-current="step"
                   className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-brand-600 bg-white"
                 >
@@ -164,8 +191,8 @@ export function QuizNavigation() {
                     aria-hidden="true"
                     className="h-2.5 w-2.5 rounded-full bg-brand-600"
                   />
-                  <span className="sr-only">{step.name}</span>
-                </a>
+                  <span className="sr-only">{`Question ${questionIndex + 1}`}</span>
+                </button>
               </>
             ) : (
               <>
@@ -175,16 +202,16 @@ export function QuizNavigation() {
                 >
                   <div className="h-0.5 w-full bg-gray-200" />
                 </div>
-                <a
-                  href="#"
-                  className="group relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400"
+                <button
+                  disabled={true}
+                  className="group relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white"
                 >
                   <span
                     aria-hidden="true"
-                    className="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"
+                    className="h-2.5 w-2.5 rounded-full bg-transparent"
                   />
-                  <span className="sr-only">{step.name}</span>
-                </a>
+                  <span className="sr-only">{`Question ${questionIndex + 1}`}</span>
+                </button>
               </>
             )}
           </li>
