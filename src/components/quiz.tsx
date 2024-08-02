@@ -38,20 +38,11 @@ export function Quiz() {
           // Map the fetched data to the view model state
           // Set the first question as "current" and the rest as "upcoming"
           data.map((q, i) => {
-            if (i === 0) {
-              return {
-                title: q.question,
-                options: q.options,
-                response: null,
-                status: "current",
-              };
-            }
-
             return {
               title: q.question,
               options: q.options,
               response: null,
-              status: "upcoming",
+              status: i === 0 ? "current" : "upcoming",
             };
           }),
         ),
@@ -64,17 +55,18 @@ export function Quiz() {
   const visitorIsRejected = questions.some((q) => q.response?.isRejection);
 
   function handleOptionClick(option: Option) {
-    setQuestions((currentQuestions) => {
+    setQuestions((prevQuestions) => {
       // Update the current question with its response and "complete" status
       // and set the next question as "upcoming"
-      const updatedQuestions: QuizQuestion[] = currentQuestions.map((q, i) => {
+      const updatedQuestions: QuizQuestion[] = prevQuestions.map((q, i) => {
         if (i === currentIndex) {
           return {
             ...q,
             response: option,
             status: "complete",
           };
-        } else if (i === currentIndex + 1) {
+          // Mark the next question as "current" only if it's not been completed
+        } else if (i === currentIndex + 1 && q.status !== "complete") {
           return {
             ...q,
             status: "current",
