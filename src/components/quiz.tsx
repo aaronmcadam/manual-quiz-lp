@@ -57,9 +57,9 @@ export function Quiz() {
   const isAccepted = questions.every((q) => q.status === "complete");
 
   function handleOptionClick(option: Option) {
+    // Update the current question with its response and "complete" status
+    // and set the next question as "upcoming"
     setQuestions((prevQuestions) =>
-      // Update the current question with its response and "complete" status
-      // and set the next question as "upcoming"
       prevQuestions.map((q, i) => {
         if (i === currentIndex) {
           return {
@@ -67,19 +67,31 @@ export function Quiz() {
             response: option,
             status: "complete",
           };
-        } else if (i === currentIndex + 1 && q.status === "upcoming") {
-          return {
-            ...q,
-            status: "current",
-          };
         }
+
         return q;
       }),
     );
 
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
+    // Add a small delay to show the selected option before moving to the next question
+    setTimeout(() => {
+      setQuestions((prevQuestions) =>
+        prevQuestions.map((q, i) => {
+          if (i === currentIndex + 1 && q.status === "upcoming") {
+            return {
+              ...q,
+              status: "current",
+            };
+          }
+
+          return q;
+        }),
+      );
+
+      if (currentIndex < questions.length - 1) {
+        setCurrentIndex(currentIndex + 1);
+      }
+    }, 1000);
   }
 
   // If the number of options is a multiple of 3, use 3 columns, otherwise 2
@@ -117,6 +129,9 @@ export function Quiz() {
                   variant="outline"
                   className={cn("mt-2 h-auto flex flex-col relative", {
                     "ring-2 ring-primary": isOptionSelected,
+                    // TODO: only apply this after clicking the option because otherwise, when navigating back to a question,
+                    // the selected option will blink.
+                    "animate-blink": isOptionSelected,
                   })}
                 >
                   {isOptionSelected ? (

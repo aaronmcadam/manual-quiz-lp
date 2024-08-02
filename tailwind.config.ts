@@ -57,6 +57,7 @@ const config = {
           DEFAULT: "hsl(var(--brand))",
           600: "hsl(var(--brand-600))",
           300: "hsl(var(--brand-300))",
+          100: "hsl(var(--brand-100))",
         },
       },
       borderRadius: {
@@ -73,10 +74,15 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        blink: {
+          "0%, 50%, 100%": { backgroundColor: "transparent" },
+          "25%, 75%": { backgroundColor: "hsl(var(--brand-100))" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        blink: "blink 0.6s cubic-bezier(0.4, 0, 0.2, 1) both",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
