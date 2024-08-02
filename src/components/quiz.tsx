@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
+import { CircleCheck } from "lucide-react";
 
 type Option = {
   display: string;
@@ -45,13 +46,13 @@ export function Quiz() {
   const visitorIsRejected = Object.values(chosenOptions).some((o) => o === -1);
 
   return (
-    <div className="p-4 flex-grow">
+    <div className="flex-grow m-auto max-w-2xl pt-24">
       {visitorIsRejected ? (
         <h3>You&apos;re not eligible for treatment</h3>
       ) : currentIndex === questions.length ? (
         <h3>You&apos;re eligible for treatment</h3>
       ) : currentQuestion ? (
-        <div className="mt-8">
+        <div>
           <div className="flex gap-4">
             {questions.map((_q, i) => (
               <Button
@@ -65,8 +66,10 @@ export function Quiz() {
               >{`Step ${i + 1}`}</Button>
             ))}
           </div>
-          <h3>{currentQuestion.question}</h3>
-          <div className="flex gap-4">
+          <h3 className="font-medium text-2xl text-center mt-16">
+            {currentQuestion.question}
+          </h3>
+          <div className="grid grid-cols-3 gap-4 mt-8">
             {currentQuestion.options.map((o, i) => (
               <Button
                 key={o.value}
@@ -80,11 +83,13 @@ export function Quiz() {
                   });
                 }}
                 variant="outline"
-                className={cn(
-                  "mt-2 h-auto",
-                  chosenOptions[currentIndex] === i ? "border-primary" : "",
-                )}
+                className={cn("mt-2 h-auto flex flex-col relative", {
+                  "ring-2 ring-primary": chosenOptions[currentIndex] === i,
+                })}
               >
+                {chosenOptions[currentIndex] === i ? (
+                  <CircleCheck className="h-5 w-5 text-primary absolute top-2 right-2" />
+                ) : null}
                 <span dangerouslySetInnerHTML={{ __html: o.display }} />
                 {o.value}
               </Button>
