@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
-import { CircleCheck } from "lucide-react";
+import { CheckIcon, CircleCheck } from "lucide-react";
 
 type Option = {
   display: string;
@@ -53,6 +53,7 @@ export function Quiz() {
         <h3>You&apos;re eligible for treatment</h3>
       ) : currentQuestion ? (
         <div>
+          <QuizNavigation />
           <div className="flex gap-4">
             {questions.map((_q, i) => (
               <Button
@@ -98,5 +99,97 @@ export function Quiz() {
         </div>
       ) : null}
     </div>
+  );
+}
+
+// const steps = [
+//   { name: "Step 1", href: "#", status: "complete" },
+//   { name: "Step 2", href: "#", status: "complete" },
+//   { name: "Step 3", href: "#", status: "current" },
+//   { name: "Step 4", href: "#", status: "upcoming" },
+//   { name: "Step 5", href: "#", status: "upcoming" },
+// ];
+
+const steps = [
+  { name: "Step 1", href: "#", status: "complete" },
+  { name: "Step 2", href: "#", status: "current" },
+  { name: "Step 3", href: "#", status: "upcoming" },
+];
+
+export function QuizNavigation() {
+  return (
+    <nav aria-label="Progress">
+      <ol role="list" className="flex items-center">
+        {steps.map((step, stepIndex) => (
+          <li
+            key={step.name}
+            className={cn(
+              stepIndex !== steps.length - 1 ? "pr-8 sm:pr-20" : "",
+              "relative",
+            )}
+          >
+            {step.status === "complete" ? (
+              <>
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 flex items-center"
+                >
+                  <div className="h-0.5 w-full bg-brand/50" />
+                </div>
+                <a
+                  href="#"
+                  className="relative flex h-8 w-8 items-center justify-center rounded-full bg-brand-600 hover:bg-brand-300"
+                >
+                  <CheckIcon
+                    aria-hidden="true"
+                    className="h-5 w-5 text-white"
+                  />
+                  <span className="sr-only">{step.name}</span>
+                </a>
+              </>
+            ) : step.status === "current" ? (
+              <>
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 flex items-center"
+                >
+                  <div className="h-0.5 w-full bg-gray-200" />
+                </div>
+                <a
+                  href="#"
+                  aria-current="step"
+                  className="relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-brand-600 bg-white"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="h-2.5 w-2.5 rounded-full bg-brand-600"
+                  />
+                  <span className="sr-only">{step.name}</span>
+                </a>
+              </>
+            ) : (
+              <>
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 flex items-center"
+                >
+                  <div className="h-0.5 w-full bg-gray-200" />
+                </div>
+                <a
+                  href="#"
+                  className="group relative flex h-8 w-8 items-center justify-center rounded-full border-2 border-gray-300 bg-white hover:border-gray-400"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="h-2.5 w-2.5 rounded-full bg-transparent group-hover:bg-gray-300"
+                  />
+                  <span className="sr-only">{step.name}</span>
+                </a>
+              </>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }
