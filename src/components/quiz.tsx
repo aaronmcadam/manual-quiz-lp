@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { CircleCheck } from "lucide-react";
 import { QuizNavigation } from "./quiz-navigation";
+import { QuizResult } from "./quiz-result";
 
 type Option = {
   display: string;
@@ -84,9 +85,9 @@ export function Quiz() {
   return (
     <div className="flex-grow m-auto max-w-2xl pt-24">
       {isRejected ? (
-        <h3>You&apos;re not eligible for treatment</h3>
+        <QuizResult status="rejected" />
       ) : isAccepted ? (
-        <h3>You&apos;re eligible for treatment</h3>
+        <QuizResult status="accepted" />
       ) : currentQuestion ? (
         <div>
           <QuizNavigation
