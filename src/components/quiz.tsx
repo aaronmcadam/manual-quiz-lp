@@ -52,39 +52,40 @@ export function Quiz() {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const currentQuestion = questions[currentIndex];
 
-  const visitorIsRejected = questions.some((q) => q.response?.isRejection);
+  const isRejected = questions.some((q) => q.response?.isRejection);
+  const isAccepted = questions.every((q) => q.status === "complete");
 
   function handleOptionClick(option: Option) {
-    setQuestions((prevQuestions) => {
+    setQuestions((prevQuestions) =>
       // Update the current question with its response and "complete" status
       // and set the next question as "upcoming"
-      const updatedQuestions: QuizQuestion[] = prevQuestions.map((q, i) => {
+      prevQuestions.map((q, i) => {
         if (i === currentIndex) {
           return {
             ...q,
             response: option,
             status: "complete",
           };
-          // Mark the next question as "current" only if it's not been completed
-        } else if (i === currentIndex + 1 && q.status !== "complete") {
+        } else if (i === currentIndex + 1 && q.status === "upcoming") {
           return {
             ...q,
             status: "current",
           };
         }
         return q;
-      });
+      }),
+    );
 
-      return updatedQuestions;
-    });
-    setCurrentIndex(currentIndex + 1);
+    if (currentIndex < questions.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
   }
 
   return (
     <div className="flex-grow m-auto max-w-2xl pt-24">
-      {visitorIsRejected ? (
+      {isRejected ? (
         <h3>You&apos;re not eligible for treatment</h3>
-      ) : currentIndex === questions.length ? (
+      ) : isAccepted ? (
         <h3>You&apos;re eligible for treatment</h3>
       ) : currentQuestion ? (
         <div>
