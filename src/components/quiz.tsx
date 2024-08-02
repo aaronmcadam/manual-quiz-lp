@@ -82,6 +82,9 @@ export function Quiz() {
     }
   }
 
+  // If the number of options is a multiple of 3, use 3 columns, otherwise 2
+  const gridColCount = currentQuestion?.options.length % 3 === 0 ? 3 : 2;
+
   return (
     <div className="flex-grow m-auto max-w-2xl pt-24">
       {isRejected ? (
@@ -99,7 +102,11 @@ export function Quiz() {
           <h3 className="font-medium text-2xl text-center mt-16">
             {currentQuestion.title}
           </h3>
-          <div className="grid grid-cols-3 gap-4 mt-8">
+          <div
+            className={cn("grid gap-4 grid-cols-3 mt-8", {
+              "grid-cols-2": gridColCount === 2,
+            })}
+          >
             {currentQuestion.options.map((o, i) => {
               const isOptionSelected = currentQuestion.response === o;
 
