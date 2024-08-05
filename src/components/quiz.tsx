@@ -26,22 +26,29 @@ export type QuizQuestion = {
   status: "complete" | "current" | "upcoming";
 };
 
+type QuizState = {
+  questions: QuizQuestion[];
+  currentIndex: number;
+  result: "accepted" | "rejected" | null;
+};
+
 export function Quiz() {
-  const [result, setResult] = React.useState<"accepted" | "rejected" | null>(
-    null,
-  );
-  const [questions, setQuestions] = React.useState<QuizQuestion[]>([]);
+  const [quizState, setQuizState] = React.useState<QuizState>({
+    questions: [],
+    currentIndex: 0,
+    result: null,
+  });
 
   // TODO: Perf: we may want to somehow preload the display HTML because
-  // we're seeing some flicker when navigating between questions
+  // we're seeing some flicker when images have to load
   React.useEffect(() => {
     fetch("/api/questions")
       .then((res) => res.json())
       .then((data: Question[]) =>
-        setQuestions(
+        setQuizState({
           // Map the fetched data to the view model state
           // Set the first question as "current" and the rest as "upcoming"
-          data.map((q, i) => {
+          questions: data.map((q, i) => {
             return {
               title: q.question,
               options: q.options,
@@ -49,63 +56,75 @@ export function Quiz() {
               status: i === 0 ? "current" : "upcoming",
             };
           }),
-        ),
+          currentIndex: 0,
+          result: null,
+        }),
       );
   }, []);
 
   React.useEffect(() => {
-    const isRejected = questions.some((q) => q.response?.isRejection);
+    const isRejected = quizState.questions.some((q) => q.response?.isRejection);
     const isAccepted =
-      questions.length > 0
-        ? questions.every((q) => q.status === "complete")
+      quizState.questions.length > 0
+        ? quizState.questions.every((q) => q.status === "complete")
         : false;
 
     if (isRejected) {
-      setResult("rejected");
+      setQuizState((prevState) => ({ ...prevState, result: "rejected" }));
     } else if (isAccepted) {
-      setResult("accepted");
+      setQuizState((prevState) => ({ ...prevState, result: "accepted" }));
     }
-  }, [questions]);
+  }, [quizState.questions]);
 
-  const [currentIndex, setCurrentIndex] = React.useState(0);
-  const currentQuestion = questions[currentIndex];
+  const currentQuestion = quizState.questions[quizState.currentIndex];
 
+  // Update the current question with its response and "complete" status
+  // and set the next question as "upcoming"
   function handleOptionClick(option: Option) {
-    // Update the current question with its response and "complete" status
-    // and set the next question as "upcoming"
-    setQuestions((prevQuestions) =>
-      prevQuestions.map((q, i) => {
-        if (i === currentIndex) {
+    setQuizState((prevState) => {
+      const updatedQuestions = prevState.questions.map((q, i) => {
+        if (i === prevState.currentIndex) {
           return {
             ...q,
             response: option,
             status: "complete",
-          };
+          } as const;
         }
 
         return q;
-      }),
-    );
+      });
+
+      return {
+        ...prevState,
+        questions: updatedQuestions,
+      };
+    });
 
     // Add a small delay to show the selected option before moving to the next question
     setTimeout(() => {
-      setQuestions((prevQuestions) =>
-        prevQuestions.map((q, i) => {
-          if (i === currentIndex + 1 && q.status === "upcoming") {
+      setQuizState((prevState) => {
+        const nextIndex = prevState.currentIndex + 1;
+        const updatedQuestions = prevState.questions.map((q, i) => {
+          if (i === nextIndex && q.status === "upcoming") {
             return {
               ...q,
               status: "current",
-            };
+            } as const;
           }
 
           return q;
-        }),
-      );
+        });
 
-      if (currentIndex < questions.length - 1) {
-        setCurrentIndex(currentIndex + 1);
-      }
-    }, 1000);
+        return {
+          ...prevState,
+          questions: updatedQuestions,
+          currentIndex:
+            nextIndex < prevState.questions.length
+              ? nextIndex
+              : prevState.currentIndex,
+        };
+      });
+    }, 600); // 600ms delay for double blink effect
   }
 
   // If the number of options is a multiple of 3, use 3 columns, otherwise 2
@@ -113,14 +132,17 @@ export function Quiz() {
 
   return (
     <div className="flex-grow m-auto max-w-2xl pt-24">
-      {result ? (
-        <QuizResult result={result} />
+      {quizState.result ? (
+        <QuizResult result={quizState.result} />
       ) : currentQuestion ? (
         <div>
           <QuizNavigation
-            questions={questions}
+            questions={quizState.questions}
             onButtonClick={(questionIndex) => {
-              setCurrentIndex(questionIndex);
+              setQuizState((prevState) => ({
+                ...prevState,
+                currentIndex: questionIndex,
+              }));
             }}
           />
           <h3 className="font-medium text-2xl text-center mt-16">
