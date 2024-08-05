@@ -39,12 +39,15 @@ export function Quiz() {
   });
 
   // TODO: Perf: we may want to somehow preload the display HTML because
-  // we're seeing some flicker when images have to load
+  // we're seeing some flicker when images have to load.
+  // Hard coding the height of the option helps, but it's not ideal.
+  // We'd probably need to parse or regex the html to check what element it is.
   React.useEffect(() => {
     fetch("/api/questions")
       .then((res) => res.json())
       .then((data: Question[]) =>
-        setQuizState({
+        setQuizState((prevState) => ({
+          ...prevState,
           // Map the fetched data to the view model state
           // Set the first question as "current" and the rest as "upcoming"
           questions: data.map((q, i) => {
@@ -55,25 +58,9 @@ export function Quiz() {
               status: i === 0 ? "current" : "upcoming",
             };
           }),
-          currentIndex: 0,
-          result: null,
-        }),
+        })),
       );
   }, []);
-
-  React.useEffect(() => {
-    const isRejected = quizState.questions.some((q) => q.response?.isRejection);
-    const isAccepted =
-      quizState.questions.length > 0
-        ? quizState.questions.every((q) => q.status === "complete")
-        : false;
-
-    if (isRejected) {
-      setQuizState((prevState) => ({ ...prevState, result: "rejected" }));
-    } else if (isAccepted) {
-      setQuizState((prevState) => ({ ...prevState, result: "accepted" }));
-    }
-  }, [quizState.questions]);
 
   const currentQuestion = quizState.questions[quizState.currentIndex];
 
@@ -113,6 +100,12 @@ export function Quiz() {
 
           return q;
         });
+        const isRejected = updatedQuestions.some(
+          (q) => q.response?.isRejection,
+        );
+        const isAccepted = updatedQuestions.every(
+          (q) => q.status === "complete",
+        );
 
         return {
           ...prevState,
@@ -121,6 +114,7 @@ export function Quiz() {
             nextIndex < prevState.questions.length
               ? nextIndex
               : prevState.currentIndex,
+          result: isRejected ? "rejected" : isAccepted ? "accepted" : null,
         };
       });
     }, 600); // 600ms delay for double blink effect
