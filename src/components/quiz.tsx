@@ -41,7 +41,7 @@ export function Quiz() {
   // TODO: Perf: we may want to somehow preload the display HTML because
   // we're seeing some flicker when images have to load.
   // Hard coding the height of the option helps, but it's not ideal.
-  // We'd probably need to parse or regex the html to check what element it is.
+  // We'd probably need to parse or regex the html to check what element it is to preload the image.
   React.useEffect(() => {
     fetch("/api/questions")
       .then((res) => res.json())
@@ -65,7 +65,6 @@ export function Quiz() {
   const currentQuestion = quizState.questions[quizState.currentIndex];
 
   // Update the current question with its response and "complete" status
-  // and set the next question as "upcoming"
   function handleOptionClick(option: Option) {
     setQuizState((prevState) => {
       const updatedQuestions = prevState.questions.map((q, i) => {
@@ -117,7 +116,7 @@ export function Quiz() {
           result: isRejected ? "rejected" : isAccepted ? "accepted" : null,
         };
       });
-    }, 600); // 600ms delay for double blink effect
+    }, 600); // 600ms delay matches the blink animation duration
   }
 
   // If the number of options is a multiple of 3, use 3 columns, otherwise 2
