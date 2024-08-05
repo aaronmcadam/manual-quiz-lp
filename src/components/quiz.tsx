@@ -123,44 +123,46 @@ export function Quiz() {
   const gridColCount = currentQuestion?.options.length % 3 === 0 ? 3 : 2;
 
   return (
-    <div className="flex-grow m-auto max-w-2xl pt-24">
-      {quizState.result ? (
-        <QuizResult result={quizState.result} />
-      ) : currentQuestion ? (
-        <div>
-          <QuizNavigation
-            questions={quizState.questions}
-            onButtonClick={(questionIndex) => {
-              setQuizState((prevState) => ({
-                ...prevState,
-                currentIndex: questionIndex,
-              }));
-            }}
-          />
-          <h3 className="font-medium text-2xl text-center mt-16">
-            {currentQuestion.title}
-          </h3>
-          <div
-            className={cn("grid gap-4 grid-cols-3 mt-8", {
-              "grid-cols-2": gridColCount === 2,
-            })}
-          >
-            {currentQuestion.options.map((o, i) => {
-              const isOptionSelected = currentQuestion.response === o;
+    <div className="flex-grow p-6 overflow-auto sm:pt-24">
+      <div className="m-auto max-w-2xl">
+        {quizState.result ? (
+          <QuizResult result={quizState.result} />
+        ) : currentQuestion ? (
+          <div>
+            <QuizNavigation
+              questions={quizState.questions}
+              onButtonClick={(questionIndex) => {
+                setQuizState((prevState) => ({
+                  ...prevState,
+                  currentIndex: questionIndex,
+                }));
+              }}
+            />
+            <h3 className="font-medium text-2xl text-center mt-6 sm:mt-16">
+              {currentQuestion.title}
+            </h3>
+            <div
+              className={cn("grid gap-4 grid-cols-2 sm:grid-cols-2 mt-8", {
+                "sm:grid-cols-2": gridColCount === 2,
+              })}
+            >
+              {currentQuestion.options.map((o, i) => {
+                const isOptionSelected = currentQuestion.response === o;
 
-              return (
-                <QuizOption
-                  key={i}
-                  onClick={() => handleOptionClick(o)}
-                  isSelected={isOptionSelected}
-                  display={o.display}
-                  value={o.value}
-                />
-              );
-            })}
+                return (
+                  <QuizOption
+                    key={i}
+                    onClick={() => handleOptionClick(o)}
+                    isSelected={isOptionSelected}
+                    display={o.display}
+                    value={o.value}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   );
 }
