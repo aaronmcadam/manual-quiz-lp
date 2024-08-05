@@ -27,6 +27,9 @@ export type QuizQuestion = {
 };
 
 export function Quiz() {
+  const [result, setResult] = React.useState<"accepted" | "rejected" | null>(
+    null,
+  );
   const [questions, setQuestions] = React.useState<QuizQuestion[]>([]);
 
   // TODO: Perf: we may want to somehow preload the display HTML because
@@ -50,11 +53,22 @@ export function Quiz() {
       );
   }, []);
 
+  React.useEffect(() => {
+    const isRejected = questions.some((q) => q.response?.isRejection);
+    const isAccepted =
+      questions.length > 0
+        ? questions.every((q) => q.status === "complete")
+        : false;
+
+    if (isRejected) {
+      setResult("rejected");
+    } else if (isAccepted) {
+      setResult("accepted");
+    }
+  }, [questions]);
+
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const currentQuestion = questions[currentIndex];
-
-  const isRejected = questions.some((q) => q.response?.isRejection);
-  const isAccepted = questions.every((q) => q.status === "complete");
 
   function handleOptionClick(option: Option) {
     // Update the current question with its response and "complete" status
@@ -99,10 +113,8 @@ export function Quiz() {
 
   return (
     <div className="flex-grow m-auto max-w-2xl pt-24">
-      {isRejected ? (
-        <QuizResult status="rejected" />
-      ) : isAccepted ? (
-        <QuizResult status="accepted" />
+      {result ? (
+        <QuizResult result={result} />
       ) : currentQuestion ? (
         <div>
           <QuizNavigation

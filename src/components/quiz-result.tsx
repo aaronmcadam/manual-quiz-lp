@@ -2,17 +2,17 @@ import { CheckCircle } from "lucide-react";
 import { CircleX } from "lucide-react";
 
 export type QuizResultProps = {
-  status: "accepted" | "rejected";
+  result: "accepted" | "rejected";
 };
 
-export function QuizResult({ status }: QuizResultProps) {
+export function QuizResult({ result }: QuizResultProps) {
   return (
     <div>
       <h2 className="font-medium text-2xl text-center mt-16">
         Finished! Your result is...
       </h2>
       <div className="mt-16">
-        {status === "accepted" ? <SuccessAlert /> : <ErrorAlert />}
+        {result === "accepted" ? <SuccessAlert /> : <ErrorAlert />}
       </div>
     </div>
   );
