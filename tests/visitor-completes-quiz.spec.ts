@@ -26,12 +26,23 @@ test("visitor accepted for treatment", async ({ page }) => {
       name: /which image best matches your hair loss/i,
     }),
   ).toBeVisible();
-
   await page
     .getByRole("button", { name: /temples/i })
     .first()
     .click();
+
+  await expect(
+    page.getByRole("heading", {
+      name: /which image best matches your hair loss/i,
+    }),
+  ).toBeVisible();
   await page.getByRole("button", { name: /no/i }).click();
+
+  await expect(
+    page.getByRole("heading", {
+      name: /breast cancer/i,
+    }),
+  ).toBeVisible();
   await page.getByRole("button", { name: /no/i }).click();
 
   await expect(
