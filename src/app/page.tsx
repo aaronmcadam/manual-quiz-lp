@@ -9,14 +9,14 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <div className="flex pt-8 bg-brand/25">
+      <div className="flex flex-col md:flex-row pt-8 px-6 lg:px-0 bg-brand/25">
         <div className="mx-auto max-w-2xl">
           <div>
             <span className="sr-only">Manual</span>
-            <ManualLogo />
+            <ManualLogo className="w-10 h-10" />
           </div>
-          <div className="mt-28">
-            <h1 className="font-medium tracking-tight text-8xl text-brand">
+          <div className="my-8 sm:mt-28">
+            <h1 className="font-medium tracking-tight text-6xl sm:text-8xl text-brand">
               Be good
               <br /> to yourself
             </h1>
@@ -27,10 +27,11 @@ export default function Home() {
             <QuizButton />
           </div>
         </div>
+        {/* TODO: Include the hero image on smaller screens, possibly setting it as a bg image instead of an inline element */}
         <Image
           src="/images/hero-bg.png"
-          alt="Hero Background"
-          className="flex-none mt-8 mr-8"
+          alt="Hero Image"
+          className="hidden lg:inline flex-none mt-8 mr-8"
           width={596}
           height={697}
           priority
@@ -38,12 +39,12 @@ export default function Home() {
       </div>
 
       {/* Treatments */}
-      <div className="flex flex-col items-center pt-16 pb-24">
-        <h2 className="font-medium text-brand tracking-tight text-4xl">
+      <div className="flex flex-col items-center pt-10 sm:pt-16 pb-24 px-6 lg:px-0">
+        <h2 className="font-medium text-center text-brand tracking-tight text-3xl sm:text-4xl">
           What we can help with
         </h2>
-        <div className="mt-16">
-          <div className="flex items-center relative">
+        <div className="mt-8 sm:mt-16">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:relative">
             <Image
               src="/images/hair-loss.png"
               className="z-10"
@@ -52,15 +53,15 @@ export default function Home() {
               height={445}
               priority
             />
-            <span className="select-none text-brand/5 text-[450px] leading-none absolute left-[30%] z-0">
+            <span className="hidden sm:inline select-none text-brand/5 text-[450px] leading-none sm:absolute sm:left-[30%] sm:z-0">
               01
             </span>
-            <div className="pl-32 z-10">
-              <div className="flex flex-col max-w-80">
+            <div className="sm:pl-32 sm:z-10">
+              <div className="flex flex-col max-w-80 mt-4 sm:mt-0">
                 <h3 className="font-bold text-xs text-brand/75 uppercase tracking-wider">
                   Hair loss
                 </h3>
-                <h4 className="font-medium text-2xl text-brand mt-2">
+                <h4 className="font-medium text-xl sm:text-2xl text-brand mt-2">
                   Hair loss needn’t be irreversible. We can help!
                 </h4>
                 <p className="mt-5 text-brand">
@@ -70,16 +71,16 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="flex items-center relative mt-44">
-            <span className="select-none text-brand/5 text-[450px] leading-none absolute right-[30%] z-0">
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:relative mt-20 sm:mt-44">
+            <span className="hidden sm:inline select-none text-brand/5 text-[450px] leading-none sm:absolute sm:left-[30%] sm:z-0">
               02
             </span>
-            <div className="pr-32 z-10">
-              <div className="flex flex-col max-w-80">
+            <div className="sm:pl-32 sm:z-10">
+              <div className="flex flex-col max-w-80 mt-4 sm:mt-0">
                 <h3 className="font-bold text-xs text-brand/75 uppercase tracking-wider">
                   Erectile dysfunction
                 </h3>
-                <h4 className="font-medium text-2xl text-brand mt-2">
+                <h4 className="font-medium text-xl sm:text-2xl text-brand mt-2">
                   Erections can be a tricky thing. But no need to feel down!
                 </h4>
                 <p className="mt-5 text-brand">
@@ -132,7 +133,7 @@ function Footer() {
       </h2>
       <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-          <ManualLogo size={75} />
+          <ManualLogo className="w-[52px] h-[52px] sm:w-[74px] sm:h-[74px]" />
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
