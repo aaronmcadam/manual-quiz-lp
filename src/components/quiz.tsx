@@ -2,10 +2,9 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { Button } from "./ui/button";
-import { CircleCheck } from "lucide-react";
 import { QuizNavigation } from "./quiz-navigation";
 import { QuizResult } from "./quiz-result";
+import { QuizOption } from "./quiz-option";
 
 type Option = {
   display: string;
@@ -157,23 +156,13 @@ export function Quiz() {
               const isOptionSelected = currentQuestion.response === o;
 
               return (
-                <Button
+                <QuizOption
                   key={i}
                   onClick={() => handleOptionClick(o)}
-                  variant="outline"
-                  className={cn("mt-2 h-auto flex flex-col relative", {
-                    "ring-2 ring-primary": isOptionSelected,
-                    // TODO: only apply this after clicking the option because otherwise, when navigating back to a question,
-                    // the selected option will blink.
-                    "animate-blink": isOptionSelected,
-                  })}
-                >
-                  {isOptionSelected ? (
-                    <CircleCheck className="h-5 w-5 text-primary absolute top-2 right-2" />
-                  ) : null}
-                  <span dangerouslySetInnerHTML={{ __html: o.display }} />
-                  {o.value}
-                </Button>
+                  isSelected={isOptionSelected}
+                  display={o.display}
+                  value={o.value}
+                />
               );
             })}
           </div>
