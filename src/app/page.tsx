@@ -39,7 +39,7 @@ export default function Home() {
       </div>
 
       {/* Treatments */}
-      <div className="flex flex-col items-center pt-10 sm:pt-16 pb-24 px-6 lg:px-0">
+      <div className="flex flex-col items-center pt-10 sm:pt-16 pb-20 sm:pb-24 px-6 lg:px-0">
         <h2 className="font-medium text-center text-brand tracking-tight text-3xl sm:text-4xl">
           What we can help with
         </h2>
@@ -131,7 +131,7 @@ function Footer() {
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
-      <div className="mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8">
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <ManualLogo className="w-[52px] h-[52px] sm:w-[74px] sm:h-[74px]" />
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
