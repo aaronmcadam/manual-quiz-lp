@@ -53,6 +53,14 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        brand: {
+          50: "hsl(var(--brand-50))",
+          100: "hsl(var(--brand-100))",
+          300: "hsl(var(--brand-300))",
+          600: "hsl(var(--brand-600))",
+          800: "hsl(var(--brand-800))",
+          hero: "hsl(var(--brand-hero))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -68,10 +76,15 @@ const config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        blink: {
+          "0%, 50%, 100%": { backgroundColor: "transparent" },
+          "25%, 75%": { backgroundColor: "hsl(var(--brand-100))" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        blink: "blink 0.6s cubic-bezier(0.4, 0, 0.2, 1) both",
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
@@ -82,4 +95,3 @@ const config = {
 } satisfies Config;
 
 export default config;
-
