@@ -138,7 +138,7 @@ export function Quiz() {
                 }));
               }}
             />
-            <h3 className="font-medium text-2xl text-center mt-6 sm:mt-16">
+            <h3 className="font-medium text-brand-800 text-2xl text-center mt-6 sm:mt-16">
               {currentQuestion.title}
             </h3>
             <div

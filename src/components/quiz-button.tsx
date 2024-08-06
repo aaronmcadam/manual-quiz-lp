@@ -22,10 +22,10 @@ export function QuizButton() {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="text-brand">
+          <DialogTitle className="text-brand-800">
             Is Manual Right For You?
           </DialogTitle>
-          <DialogDescription className="text-brand">
+          <DialogDescription className="text-brand-800">
             Help us provide you with the best possible care by answering a few
             quick questions.
           </DialogDescription>

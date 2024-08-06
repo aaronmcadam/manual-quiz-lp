@@ -3,7 +3,7 @@ type ManualLogoProps = {
   className?: string;
 };
 
-export function ManualLogo({ className = "text-brand" }: ManualLogoProps) {
+export function ManualLogo({ className = "text-brand-800" }: ManualLogoProps) {
   return (
     <svg className={className} viewBox="0 0 40 40" fill="none">
       <path

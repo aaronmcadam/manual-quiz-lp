@@ -9,18 +9,18 @@ export default function Home() {
   return (
     <main>
       {/* Hero */}
-      <div className="flex flex-col md:flex-row pt-8 px-6 lg:px-0 bg-brand/25">
+      <div className="flex flex-col md:flex-row pt-8 px-6 lg:px-0 bg-brand-hero">
         <div className="mx-auto max-w-2xl">
           <div>
             <span className="sr-only">Manual</span>
             <ManualLogo className="w-10 h-10" />
           </div>
           <div className="my-8 sm:mt-28">
-            <h1 className="font-medium tracking-tight text-6xl sm:text-8xl text-brand">
+            <h1 className="font-medium tracking-tight text-6xl sm:text-8xl text-brand-800">
               Be good
               <br /> to yourself
             </h1>
-            <p className="mt-5 text-lg text-brand">
+            <p className="mt-5 text-lg text-brand-800">
               We’re working around the clock to bring you a holistic approach to
               your wellness. From top to bottom, inside and out.
             </p>
@@ -40,7 +40,7 @@ export default function Home() {
 
       {/* Treatments */}
       <div className="flex flex-col items-center pt-10 sm:pt-16 pb-20 sm:pb-24 px-6 lg:px-0">
-        <h2 className="font-medium text-center text-brand tracking-tight text-3xl sm:text-4xl">
+        <h2 className="font-medium text-center text-brand-800 tracking-tight text-3xl sm:text-4xl">
           What we can help with
         </h2>
         <div className="mt-8 sm:mt-16">
@@ -53,18 +53,18 @@ export default function Home() {
               height={445}
               priority
             />
-            <span className="hidden sm:inline select-none text-brand/5 text-[450px] leading-none sm:absolute sm:left-[30%] sm:z-0">
+            <span className="hidden sm:inline select-none text-brand-50 text-[450px] leading-none sm:absolute sm:left-[30%] sm:z-0">
               01
             </span>
             <div className="sm:pl-32 sm:z-10">
               <div className="flex flex-col max-w-80 mt-4 sm:mt-0">
-                <h3 className="font-bold text-xs text-brand/75 uppercase tracking-wider">
+                <h3 className="font-bold text-xs text-brand-600 uppercase tracking-wider">
                   Hair loss
                 </h3>
-                <h4 className="font-medium text-xl sm:text-2xl text-brand mt-2">
+                <h4 className="font-medium text-xl sm:text-2xl text-brand-800 mt-2">
                   Hair loss needn’t be irreversible. We can help!
                 </h4>
-                <p className="mt-5 text-brand">
+                <p className="mt-5 text-brand-800">
                   We’re working around the clock to bring you a holistic
                   approach to your wellness. From top to bottom, inside and out.
                 </p>
@@ -72,18 +72,18 @@ export default function Home() {
             </div>
           </div>
           <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:relative mt-20 sm:mt-44">
-            <span className="hidden sm:inline select-none text-brand/5 text-[450px] leading-none sm:absolute sm:left-[30%] sm:z-0">
+            <span className="hidden sm:inline select-none text-brand-50 text-[450px] leading-none sm:absolute sm:right-[30%] sm:z-0">
               02
             </span>
-            <div className="sm:pl-32 sm:z-10">
+            <div className="sm:pr-32 sm:z-10">
               <div className="flex flex-col max-w-80 mt-4 sm:mt-0">
-                <h3 className="font-bold text-xs text-brand/75 uppercase tracking-wider">
+                <h3 className="font-bold text-xs text-brand-600 uppercase tracking-wider">
                   Erectile dysfunction
                 </h3>
-                <h4 className="font-medium text-xl sm:text-2xl text-brand mt-2">
+                <h4 className="font-medium text-xl sm:text-2xl text-brand-800 mt-2">
                   Erections can be a tricky thing. But no need to feel down!
                 </h4>
-                <p className="mt-5 text-brand">
+                <p className="mt-5 text-brand-800">
                   We’re working around the clock to bring you a holistic
                   approach to your wellness. From top to bottom, inside and out.
                 </p>
@@ -127,7 +127,7 @@ const footerNavigation = {
 
 function Footer() {
   return (
-    <footer aria-labelledby="footer-heading" className="bg-brand/10">
+    <footer aria-labelledby="footer-heading" className="bg-brand-100">
       <h2 id="footer-heading" className="sr-only">
         Footer
       </h2>
@@ -137,7 +137,7 @@ function Footer() {
           <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-xs uppercase tracking-wider font-bold leading-6 text-brand">
+                <h3 className="text-xs uppercase tracking-wider font-bold leading-6 text-brand-800">
                   Product
                 </h3>
                 <ul role="list" className="mt-6 space-y-5">
@@ -145,7 +145,7 @@ function Footer() {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="leading-6 text-brand hover:text-brand/70"
+                        className="leading-6 text-brand-800 hover:text-brand-600"
                       >
                         {item.name}
                       </a>
@@ -154,7 +154,7 @@ function Footer() {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-xs uppercase tracking-wider font-bold leading-6 text-brand">
+                <h3 className="text-xs uppercase tracking-wider font-bold leading-6 text-brand-800">
                   Company
                 </h3>
                 <ul role="list" className="mt-6 space-y-5">
@@ -162,7 +162,7 @@ function Footer() {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="leading-6 text-brand hover:text-brand/70"
+                        className="leading-6 text-brand-800 hover:text-brand-600"
                       >
                         {item.name}
                       </a>
@@ -173,7 +173,7 @@ function Footer() {
             </div>
             <div className="md:grid md:grid-cols-2 md:gap-8">
               <div>
-                <h3 className="text-xs uppercase tracking-wider font-bold leading-6 text-brand">
+                <h3 className="text-xs uppercase tracking-wider font-bold leading-6 text-brand-800">
                   Info
                 </h3>
                 <ul role="list" className="mt-6 space-y-5">
@@ -181,7 +181,7 @@ function Footer() {
                     <li key={item.name}>
                       <a
                         href={item.href}
-                        className="leading-6 text-brand hover:text-brand/70"
+                        className="leading-6 text-brand-800 hover:text-brand-600"
                       >
                         {item.name}
                       </a>
@@ -190,7 +190,7 @@ function Footer() {
                 </ul>
               </div>
               <div className="mt-10 md:mt-0">
-                <h3 className="text-xs uppercase tracking-wider font-bold leading-6 text-brand">
+                <h3 className="text-xs uppercase tracking-wider font-bold leading-6 text-brand-800">
                   Follow us
                 </h3>
                 <ul role="list" className="mt-6 flex gap-5">
@@ -215,8 +215,8 @@ function Footer() {
           </div>
         </div>
       </div>
-      <div className="mx-auto max-w-7xl border-brand/10 border-t">
-        <p className="text-center text-brand p-6">
+      <div className="mx-auto max-w-7xl border-brand-300/50 border-t">
+        <p className="text-center text-brand-800 p-6">
           &copy; 2024 Manual. All rights reserved.
         </p>
       </div>

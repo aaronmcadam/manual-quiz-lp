@@ -28,7 +28,7 @@ export function QuizNavigation({
                   aria-hidden="true"
                   className="absolute inset-0 flex items-center"
                 >
-                  <div className="h-0.5 w-full bg-brand/50" />
+                  <div className="h-0.5 w-full bg-brand-50" />
                 </div>
                 <button
                   onClick={() => onButtonClick(questionIndex)}
